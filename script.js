@@ -3,56 +3,56 @@ const PRODUCTS = [
   {
     id: '1',
     name: "WOMEN'S PRO SWIMSUIT",
-    price: 65,
+    price: '$65',
     image: 'https://images.unsplash.com/photo-1519046904884-53103b34b206?auto=format&fit=crop&q=80&w=800',
     category: 'SWIM'
   },
   {
     id: '2',
-    name: "ELITE BASKETBALL JERSEY",
-    price: 50,
+    name: "BASKETBALL",
+    price: '$50',
     image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&q=80&w=800',
     category: 'BASKETBALL'
   },
   {
     id: '3',
     name: "MEN'S ELITE PERFORMANCE SHOES",
-    price: 80,
+    price: '$80',
     image: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800',
     category: 'ALL'
   },
   {
     id: '4',
-    name: "WOMEN'S PERFORMANCE FINJAMAS",
-    price: 65,
+    name: "WOMEN FINAJAMS",
+    price: '$65',
     image: 'https://images.unsplash.com/photo-1518310383802-640c2de311b2?auto=format&fit=crop&q=80&w=800',
     category: "WOMEN'S"
   },
   {
     id: '5',
-    name: "UNISEX SWIM GOGGLES",
-    price: 25,
+    name: "UNISEX SWIM GOGGLE",
+    price: '$25',
     image: 'https://images.unsplash.com/photo-1551698618-1fed5d978244?auto=format&fit=crop&q=80&w=800',
     category: 'SWIM'
   },
   {
     id: '6',
     name: "MEN'S PERFORMANCE TEE",
-    price: 40,
+    price: '$40',
     image: 'https://images.unsplash.com/photo-1581655353564-df123a1eb820?auto=format&fit=crop&q=80&w=800',
     category: 'ALL'
   },
   {
     id: '7',
-    name: "GYM GLOVES & BOTTLE SET",
-    price: 40,
+    name: "GYM GLOVES & BOTTLE",
+    price: '$40',
     image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80&w=800',
     category: 'ALL'
   },
   {
     id: '8',
     name: "PRO BASKETBALL SHORTS",
-    price: 35,
+    price: '$35',
     image: 'https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&q=80&w=800',
     category: 'BASKETBALL'
   }
@@ -99,7 +99,11 @@ async function loadComponents() {
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
-  loadComponents();
+  // Initialize elements and render content directly
+  initializeElements();
+  renderCategoryTabs();
+  renderProducts();
+  attachEventListeners();
 });
 
 function initializeElements() {
@@ -144,9 +148,9 @@ function renderProducts() {
           <h3 class="product-name">${product.name}</h3>
         </div>
         <div class="product-footer">
-          <span class="product-price">$${product.price}</span>
+          <span class="product-price">${product.price}</span>
           <button class="product-button" data-product-id="${product.id}">
-            Click View
+            CLICK VIEW
           </button>
         </div>
       </div>
