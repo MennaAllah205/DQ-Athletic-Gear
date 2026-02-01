@@ -110,6 +110,12 @@ function initializeElements() {
   categoryTabs = document.querySelector('.category-tabs');
   productsGrid = document.querySelector('.products-grid');
   mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+  
+  // Ensure mobile menu button is properly set up
+  if (mobileMenuBtn) {
+    mobileMenuBtn.setAttribute('aria-label', 'Toggle mobile menu');
+    mobileMenuBtn.setAttribute('aria-expanded', 'false');
+  }
 }
 
 function renderCategoryTabs() {
@@ -181,7 +187,9 @@ function attachEventListeners() {
   
   // Mobile menu toggle
   if (mobileMenuBtn) {
-    mobileMenuBtn.addEventListener('click', function() {
+    mobileMenuBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
       toggleMobileMenu();
     });
   }
@@ -285,4 +293,153 @@ window.addEventListener('scroll', function() {
   const scrolled = window.scrollY;
   const rate = scrolled * -0.5;
   heroBackground.style.transform = `translateY(${rate}px)`;
+});
+// Mobile Menu Functionality
+function toggleMobileMenu() {
+  const nav = document.querySelector('header nav');
+  const mobileBtn = document.querySelector('.mobile-menu-btn');
+  const loginBtn = document.querySelector('.login-button');
+  
+  if (nav && mobileBtn) {
+    const isVisible = nav.classList.contains('mobile-nav-open');
+    
+    if (isVisible) {
+      // Close menu
+      nav.classList.remove('mobile-nav-open');
+      mobileBtn.setAttribute('aria-expanded', 'false');
+      
+      // Remove login button from nav if it was added
+      const mobileLoginBtn = nav.querySelector('.mobile-login-btn');
+      if (mobileLoginBtn) {
+        mobileLoginBtn.remove();
+      }
+      
+      // Reset inline styles
+      nav.style.cssText = '';
+    } else {
+      // Open menu
+      nav.classList.add('mobile-nav-open');
+      mobileBtn.setAttribute('aria-expanded', 'true');
+      
+      // Add login button to mobile menu
+      if (loginBtn) {
+        const mobileLoginBtn = loginBtn.cloneNode(true);
+        mobileLoginBtn.classList.add('mobile-login-btn');
+        mobileLoginBtn.classList.remove('hidden', 'md:block', 'login-button');
+        nav.appendChild(mobileLoginBtn);
+      }
+    }
+  }
+}
+
+// Close mobile menu when clicking outside
+document.addEventListener('click', function(e) {
+  const nav = document.querySelector('header nav');
+  const mobileBtn = document.querySelector('.mobile-menu-btn');
+  const header = document.querySelector('header');
+  
+  if (nav && mobileBtn && header) {
+    if (!header.contains(e.target) && nav.classList.contains('mobile-nav-open')) {
+      nav.style.display = 'none';
+      nav.classList.remove('mobile-nav-open');
+    }
+  }
+});
+
+// Handle window resize
+window.addEventListener('resize', function() {
+  const nav = document.querySelector('header nav');
+  
+  if (nav && window.innerWidth >= 768) {
+    nav.style.display = '';
+    nav.style.flexDirection = '';
+    nav.style.position = '';
+    nav.style.top = '';
+    nav.style.left = '';
+    nav.style.right = '';
+    nav.style.backgroundColor = '';
+    nav.style.padding = '';
+    nav.style.borderTop = '';
+    nav.classList.remove('mobile-nav-open');
+  } else if (nav && window.innerWidth < 768) {
+    if (!nav.classList.contains('mobile-nav-open')) {
+      nav.style.display = 'none';
+    }
+  }
+});
+
+// Optimize images for different screen sizes
+function optimizeImages() {
+  const images = document.querySelectorAll('.athlete-image, .product-image');
+  
+  images.forEach(img => {
+    if (window.innerWidth <= 480) {
+      // Mobile: smaller images
+      img.style.objectFit = 'cover';
+      img.style.objectPosition = 'center';
+    } else if (window.innerWidth <= 768) {
+      // Tablet: medium images
+      img.style.objectFit = 'cover';
+      img.style.objectPosition = 'center';
+    } else {
+      // Desktop: full quality
+      img.style.objectFit = 'cover';
+      img.style.objectPosition = 'center';
+    }
+  });
+}
+
+// Call on load and resize
+window.addEventListener('load', optimizeImages);
+window.addEventListener('resize', optimizeImages);
+
+// Touch gestures for mobile
+let touchStartX = 0;
+let touchEndX = 0;
+
+document.addEventListener('touchstart', function(e) {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+document.addEventListener('touchend', function(e) {
+  touchEndX = e.changedTouches[0].screenX;
+  handleSwipe();
+});
+
+function handleSwipe() {
+  const swipeThreshold = 50;
+  const diff = touchStartX - touchEndX;
+  
+  if (Math.abs(diff) > swipeThreshold) {
+    if (diff > 0) {
+      // Swipe left - could trigger next category
+      console.log('Swiped left');
+    } else {
+      // Swipe right - could trigger previous category
+      console.log('Swiped right');
+    }
+  }
+}
+// Debug function to check mobile menu
+function debugMobileMenu() {
+  const mobileBtn = document.querySelector('.mobile-menu-btn');
+  const nav = document.querySelector('header nav');
+  
+  console.log('Mobile button found:', !!mobileBtn);
+  console.log('Navigation found:', !!nav);
+  
+  if (mobileBtn) {
+    console.log('Button classes:', mobileBtn.className);
+    console.log('Button parent:', mobileBtn.parentElement);
+  }
+  
+  if (nav) {
+    console.log('Nav classes:', nav.className);
+    console.log('Nav display:', window.getComputedStyle(nav).display);
+  }
+}
+
+// Call debug function after DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+  setTimeout(debugMobileMenu, 1000);
 });
